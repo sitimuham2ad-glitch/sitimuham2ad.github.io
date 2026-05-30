@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Satrizz Golden Portal v3</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f0414 0%, #030106 100%);
+            height: 100vh;
+            color: #fff;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Ambient Glow Background */
+        .decor-glow {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 77, 121, 0.12) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%;
+            z-index: 1;
+            top: 20%;
+            right: -10%;
+            filter: blur(50px);
+        }
+
+        /* Header Navigation Menu - Lebih Rapat & Smooth */
+        header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 15px;
+            display: flex;
+            justify-content: center;
+            z-index: 100;
+        }
+        .nav-menu {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 5px;
+            border-radius: 30px;
+            display: flex;
+            gap: 2px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            overflow-x: auto;
+            max-width: 95%;
+        }
+        .nav-menu::-webkit-scrollbar { display: none; }
+        .nav-item {
+            color: rgba(255, 255, 255, 0.4);
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 8px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+        .nav-item.active, .nav-item:hover {
+            color: #fff;
+            background: linear-gradient(135deg, #ff4d79 0%, #ff758f 100%);
+            box-shadow: 0 4px 15px rgba(255, 77, 121, 0.3);
+        }
+
+        /* Main Container */
+        .main-container {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Glassmorphism Card Premium */
+        .page {
+            display: none;
+            background: rgba(255, 255, 255, 0.01);
+            backdrop-filter: blur(35px);
+            -webkit-backdrop-filter: blur(35px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 40px 25px;
+            border-radius: 32px;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: 0 35px 80px rgba(0,0,0,0.8), 
+                        inset 0 0 25px rgba(255, 133, 162, 0.03);
+            animation: slideUpFade 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            text-align: center;
+        }
+        .page.active {
+            display: block;
+        }
+
+        h1 {
+            font-size: 25px;
+            font-weight: 800;
+            background: linear-gradient(45deg, #ff85a2, #fbc4ab);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+        p {
+            font-size: 13.5px;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.75);
+            margin-bottom: 20px;
+        }
+
+        /* Typing Effect Container */
+        .typing-text {
+            font-size: 14px;
+            color: #ff85a2;
+            font-weight: 600;
+            min-height: 20px;
+            margin-bottom: 15px;
+        }
+
+        /* Grid Opsi (6 Tombol Interaktif) */
+        .grid-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .opt-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 12px 8px;
+            border-radius: 14px;
+            color: #fff;
+            font-size: 12.5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .opt-btn:hover {
+            background: rgba(255, 133, 162, 0.1);
+            border-color: rgba(255, 133, 162, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* KUSTOM FRAME GAMBAR PREMIUM (Polaroid Soft Glow) */
+        .photo-wrapper {
+            width: 100%;
+            max-width: 240px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px 12px 25px 12px;
+            border-radius: 20px;
+            margin: 0 auto 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 30px rgba(255, 133, 162, 0.1);
+            transform: rotate(-2deg);
+            transition: transform 0.5s ease;
+        }
+        .photo-wrapper:hover {
+            transform: rotate(0deg) scale(1.03);
+        }
+        .photo-frame {
+            width: 100%;
+            height: 230px;
+            background: #110816;
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .no-photo-text {
+            font-size: 11px;
+            color: rgba(255,255,255,0.4);
+            padding: 15px;
+            line-height: 1.5;
+        }
+
+        /* List Harapan di Halaman Future */
+        .future-list {
+            text-align: left;
+            margin: 15px 0;
+        }
+        .future-item {
+            background: rgba(255,255,255,0.02);
+            border-left: 3px solid #ff85a2;
+            padding: 10px 12px;
+            margin-bottom: 8px;
+            border-radius: 0 10px 10px 0;
+            font-size: 12.5px;
+            color: rgba(255,255,255,0.8);
+        }
+
+        /* Footer Watermark */
+        .signature {
+            margin-top: 30px;
+            font-size: 9px;
+            color: rgba(255, 255, 255, 0.2);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 700;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            padding-top: 12px;
+        }
+
+        /* Animasi */
+        @keyframes slideUpFade { 
+            from { opacity: 0; transform: translateY(25px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+    </style>
+</head>
+<body>
+
+    <div class="decor-glow"></div>
+
+    <!-- Navigasi Menu Atas -->
+    <header>
+        <div class="nav-menu">
+            <div class="nav-item active" onclick="switchPage('home', this)">Home</div>
+            <div class="nav-item" onclick="switchPage('story', this)">Story</div>
+            <div class="nav-item" onclick="switchPage('gallery', this)">Gallery</div>
+            <div class="nav-item" onclick="switchPage('future', this)">Future</div>
+            <div class="nav-item" onclick="switchPage('chat', this)">Chat</div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        
+        <!-- HALAMAN 1: HOME -->
+        <div id="home" class="page active">
+            <div style="font-size: 50px; margin-bottom: 10px; filter: drop-shadow(0 0 10px rgba(255,133,162,0.4));">✨</div>
+            <h1>UNTUK SAYANG KU</h1>
+            <div class="typing-text" id="typing"></div>
+            <p>Tempat eksklusif hanya untuk sayang ku yang paling cantik dan imut. pilih aja itu yang di atas! 😊🤍</p>
+            <div class="signature">MADE BY SATRIA GANTENG 💻🔥</div>
+        </div>
+
+        <!-- HALAMAN 2: STORY (KATA-KATA UPGRADE JAUH LEBIH BAGUS) -->
+        <div id="story" class="page">
+            <h1>KATA² UNTUK PRINCESS KU</h1>
+            <p>Daripada diungkapkan langsung lewat kata-kata biasa, aku milih lewat koding lah bir bisa pamer di balik tombol interaktif di bawah. Coba ketuk satu-satu ya cantik maaf kalo jelek...</p>
+            <div class="grid-options">
+                <button class="opt-btn" onclick="alert('Makasih banyak ya udah mau nemenin hari-hariku yang random ini. Kehadiran kamu itu beneran bikin dunia aku jauh lebih berwarna dari biasanya dan kecantikan mu bikin aku semangat untuk menjalani hariku yang biasanya suram ini info pap yang! 🥰❤️')">🌸Terimakasih ya cantik</button>
+                <button class="opt-btn" onclick="alert('Nanti kalau di lain hari aku mendadak slow respon, jangan mikir yang aneh-aneh yaaa. Itu murni karena kuotaku lagi kritis alias abis paket data, hehe. Tenang aja, aku pasti balik kok terus kita pus epep sampe subuh! 📡')">📡 Problem banget</button>
+                <button class="opt-btn" onclick="alert('Aku bersyukur banget karena akhirnya kita bisa baikan lagi kaya sekarang. Makasih ya udah sabar banget ngadepin segala sikap egois atau kurangnya aku selama ini.✨')">💖 Grateful for You</button>
+                <button class="opt-btn" onclick="alert('Jangan sering-sering cemberut atau insecure ya, senyum kamu itu terlalu berharga kalau sampai hilang. You look most beautiful when you smile! 👑')">👑 Jangan insecure ya!</button>
+                <button class="opt-btn" onclick="alert('Kamu tahu gak? alasan aku bikin ini, yo jelss aku loh tukan koding sama aku mau buat ini jadi program terbaikku! 🚀')">💻 Alasan aku buat ini</button>
+                <button class="opt-btn" onclick="alert('Intinya, di mata aku kamu selalu jadi orang terfavorit yang gak akan terganti. Tetap jadi diri kamu yang ceria ya! 🥰✨')">🍀 My Favorite Person</button>
+            </div>
+            <div class="signature">MADE BY SATRIA WITH LOVE 💻🔥</div>
+        </div>
+
+        <!-- HALAMAN 3: GALLERY FOTO (KASTEM POLAROID GLOW) -->
+        <div id="gallery" class="page">
+            <div class="photo-wrapper">
+                <div class="photo-frame">
+                    <!-- 📸 TEMPEL LINK LANGSUNG GAMBAR DIA DI DALAM SRC DI BAWAH INI -->
+                    <img src="https://files.catbox.moe/7a66el.jpg" onerror="this.style.display='none'; document.getElementById('alt-text').style.display='block';" alt="Favorite Person">
+                    <div id="alt-text" class="no-photo-text" style="display:none;">
+                        <b>[ POLAROID FRAME ]</b><br><br>
+                        Tempel link URL foto cantiknya dia di dalam atribut <code>src="..."</code> bagian Gallery agar fotonya tampil di sini!
+                    </div>
+                </div>
+            </div>
+            <h1>Visual Appreciation</h1>
+            <p>Halaman ini sengaja disediain buat nampilin cewe tercantik dan yang paliang aku sayang jadi jangan pelit pap ya sayang! 👑❤️</p>
+            <div class="signature">MADE BY SATRIA WITH LOVE 💻🔥</div>
+        </div>
+
+        <!-- HALAMAN 4: FUTURE (HALAMAN BARU - JANJI & HARAPAN) -->
+        <div id="future" class="page">
+            <div style="font-size: 40px; margin-bottom: 5px;">🌱</div>
+            <h1>Our Future Hopes</h1>
+            <p>Ada beberapa harapan kecil dan janji sederhana yang pengen aku jaga ke depannya buat kita:</p>
+            
+            <div class="future-list">
+                <div class="future-item">🤝 Gak mau ada kata egois lagi, kalau ada masalah kita selesaikan baik-baik bareng jangan diem² terus ya.</div>
+                <div class="future-item">📈 Saling mendukung satu sama lain buat jadi pribadi yang lebih baik tiap harinya.</div>
+                <div class="future-item"> Jaga komunikasi terus, sesibuk apa pun nanti hari-hari yang kita laluin.</div>
+                <div class="future-item">✨ Selalu jadi 'safe place' terbaik buat kamu cerita tentang apa aja tanpa takut di-judge ya jangan di pendem sendiri.</div>
+            </div>
+            
+            <div class="signature">MADE BY SATRIA WITH LOVE 💻🔥</div>
+        </div>
+
+        <!-- HALAMAN 5: CHAT INTERAKTIF -->
+        <div id="chat" class="page">
+            <div style="font-size: 50px; margin-bottom: 15px; filter: drop-shadow(0 0 10px #25D366);">💬</div>
+            <h1>Direct Connection</h1>
+            <p>UNTUK CHAT COWO TERGANTENG DAN TERPINTAR DI DUNIA</p>!</p>
+            
+            <!-- MASUKKAN NOMOR HP-MU LANGSUNG DI BAWAH INI (Ganti 628XXXXXXXXXX) -->
+            <a href="https://wa.me/6284141074602?text=KIW20%KIW%20🥰🔥" target="_blank" style="background: linear-gradient(135deg, #25D366 0%, #1cbd55 100%); color: white; text-decoration: none; display: block; padding: 14px; border-radius: 16px; font-weight: bold; font-size: 14px; margin-top: 25px; box-shadow: 0 12px 30px rgba(37, 211, 102, 0.25); transition: transform 0.3s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                CHAT AJA YANG 💬
+            </a>
+            <div class="signature">MADE BY SATRIA WITH LOVE 💻🔥</div>
+        </div>
+
+    </div>
+
+    <script>
+        // Fungsi Navigasi Halaman Dinamis
+        function switchPage(pageId, element) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            
+            document.getElementById(pageId).classList.add('active');
+            
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
+
+            // Reset dan jalankan efek ngetik jika kembali ke halaman utama
+            if(pageId === 'home') {
+                document.getElementById('typing').innerHTML = "";
+                typeWriter();
+            }
+        }
+
+        // Efek Ketikan Otomatis (Typing Effect) di Halaman Utama
+        const textToType = "Hai kamu... Iya, kamu yang paling berharga.";
+        let index = 0;
+        function typeWriter() {
+            if (index < textToType.length) {
+                document.getElementById('typing').innerHTML += textToType.charAt(index);
+                index++;
+                setTimeout(typeWriter, 100);
+            } else {
+                setTimeout(() => {
+                    document.getElementById('typing').innerHTML = "";
+                    index = 0;
+                    typeWriter();
+                }, 4000); // mengulang setelah 4 detik selesai mengetik
+            }
+        }
+        // Jalankan saat pertama kali dibuka
+        window.onload = function() {
+            typeWriter();
+        };
+
+        // Efek hujan partikel estetik berkilau otomatis
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.style.position = 'absolute';
+            particle.style.pointerEvents = 'none';
+            particle.style.color = ['#ff85a2', '#fbc4ab', '#ffffff', '#ff4d79'][Math.floor(Math.random() * 4)];
+            particle.innerText = ['✨', '🌸', '🤍', '⭐'][Math.floor(Math.random() * 4)];
+            particle.style.left = Math.random() * 100 + 'vw';
+            particle.style.top = '-20px';
+            particle.style.fontSize = Math.random() * 8 + 10 + 'px';
+            particle.style.opacity = Math.random() * 0.4 + 0.3;
+            
+            const speed = Math.random() * 4 + 3;
+            particle.style.transition = `transform ${speed}s linear, opacity ${speed}s linear`;
+            document.body.appendChild(particle);
+
+            setTimeout(() => {
+                particle.style.transform = `translateY(105vh) rotate(${Math.random() * 360}deg)`;
+            }, 50);
+
+            setTimeout(() => { particle.remove(); }, speed * 1000);
+        }
+        setInterval(createParticle, 400);
+    </script>
+</body>
+</html>
